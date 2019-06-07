@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stats</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+</head>
+<body>
+<div id="content">
+  <h1>Site Statistics</h1>
+  <hr/>
+  <div id="stats-container"></div>
+</div>
+  <script>
+    // Fetch stats and display them in the page.
+    const React = window.React;
+    const ReactDOM = window.ReactDOM;
+    const h = React.createElement;
+
+    class Stats extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {};
+
+        this.fetchData = this.fetchData.bind(this);
+      }
+      
+      /* fetchData = () => {
+
+      } */
+
+      fetchData() {
+        const url = '/stats';
+        fetch(url).then(res => {
+          return res.json();
+        }).then((stats) => {
+          this.setState({ messageCount: stats.messageCount });
+        });
+      }
+
+      componentDidMount() {
+        this.fetchData();
+        this.timer = window.setInterval(this.fetchData, 500);
+      }
+
+      componentWillUnmount() {
+        window.clearInterval(this.timer);
+      }
+
+      render() {
+        const { messageCount } = this.state;
+        if (messageCount != null) {
+          return h('p', null, "Messages sent: " + messageCount.toString());
+        }
+
+        return h('p', null, 'Loading...');
+      }
+    }
+
+    const root = document.getElementById('stats-container');
+    ReactDOM.render(h(Stats), root);
+  </script>
+</body>
+</html>
