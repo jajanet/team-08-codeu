@@ -23,24 +23,47 @@
 
     function MessageFeed() {
       const [allMessages, setMessages] = React.useState([])
+      const [numMessagesPerUser, setNumUserMessages] = React.useState([])
 
       React.useEffect(fetchMessages, []);
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
+        // store message react components
         const fetchedMessages = []
+        // store how many messages each user posts in map for later use
+        const userMessageCounts = {}
+        // store react components of the num of msgs each user posts
+        const finalUserMessageCounts = ["Number of Messages per User:", h('br')]
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
           .then(messages => {
+            // get data from each message
             messages.forEach(message => {
+              // if a user has posted before, incr
+              if (message.user in userMessageCounts) userMessageCounts[message.user]++
+              // otherwise set their msg counts to 1
+              else userMessageCounts[message.user] = 1
+              // push message react component to list
               fetchedMessages.push(buildMessageDiv(message));
             });
+          })
+          .then(() => {
+            // update render state of all messages posted
             setMessages(fetchedMessages);
+            // go thru each user and their counts and push a react component to the list
+            for(user in userMessageCounts)
+              finalUserMessageCounts.push(buildUserCountDiv(user, userMessageCounts[user]))
+          })
+          .then(() => {
+            // update render state of each users message counts
+            setNumUserMessages(finalUserMessageCounts);
           })
           .catch(error => console.log(error.message));
       };
-      return allMessages;
+      // final state should be the message counts followed by messages
+      return [...numMessagesPerUser, ...allMessages];
     };
 
     function buildMessageDiv(message) {
@@ -55,6 +78,15 @@
           h('div', {className: "message-body"}, text)
         )
       );
+    };
+
+    function buildUserCountDiv(user, num) {
+      return (
+          h('div', null,
+            h('div', {style: {display: "inline"}}, user),
+            h('div', {style: {display: "inline", float: "right"}}, num),
+          )
+        )
     };
 
     // Fetch data and populate the UI of the page.
