@@ -23,7 +23,7 @@
 
     function MessageFeed() {
       const [allMessages, setMessages] = React.useState([])
-      const [numMessagesPerUser, setNumUserMessages] = React.useState([])
+      const [numMessagesPerUser, setNumUserMessages] = React.useState(["No messages!", h('br')])
 
       React.useEffect(fetchMessages, []);
 
@@ -34,7 +34,7 @@
         // store how many messages each user posts in map for later use
         const userMessageCounts = {}
         // store react components of the num of msgs each user posts
-        const finalUserMessageCounts = ["Number of Messages per User:", h('br')]
+        const finalUserMessageCounts = ["Number of Messages Per User:", h('br')]
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
@@ -57,8 +57,9 @@
               finalUserMessageCounts.push(buildUserCountDiv(user, userMessageCounts[user]))
           })
           .then(() => {
-            // update render state of each users message counts
-            setNumUserMessages(finalUserMessageCounts);
+            // update render state of each users message counts if msgs pushed
+            if (finalUserMessageCounts > 2)
+              setNumUserMessages(finalUserMessageCounts);
           })
           .catch(error => console.log(error.message));
       };
