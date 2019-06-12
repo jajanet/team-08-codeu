@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
 
@@ -22,72 +25,67 @@
     const h = React.createElement;
 
     function MessageFeed() {
-      const [allMessages, setMessages] = React.useState([])
-      const [numMessagesPerUser, setNumUserMessages] = React.useState(["No messages!", h('br')])
-
+      const [messagesByUser, setMessages] = React.useState(["No messages!", h('br')])
       React.useEffect(fetchMessages, []);
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
-        // store message react components
-        const fetchedMessages = []
-        // store how many messages each user posts in map for later use
-        const userMessageCounts = {}
-        // store react components of the num of msgs each user posts
-        const finalUserMessageCounts = ["Number of Messages Per User:", h('br')]
+        // Store message React components in JS Map with emails as the key
+        const fetchedMessagesByUser = new Map();
+        const completeMessageDiv = [];
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
           .then(messages => {
-            // get data from each message
+            // Map messages to the users who posted them
             messages.forEach(message => {
-              // if a user has posted before, incr
-              if (message.user in userMessageCounts) userMessageCounts[message.user]++
-              // otherwise set their msg counts to 1
-              else userMessageCounts[message.user] = 1
-              // push message react component to list
-              fetchedMessages.push(buildMessageDiv(message));
+              const {user} = message;
+              const newMessage = buildMessageDiv(message);
+              if (!fetchedMessagesByUser.has(user))
+                fetchedMessagesByUser.set(user, [newMessage]);
+              else
+                fetchedMessagesByUser.set(
+                  user, [...fetchedMessagesByUser.get(user), newMessage]
+                );
             });
           })
           .then(() => {
-            // update render state of all messages posted
-            setMessages(fetchedMessages);
-            // go thru each user and their counts and push a react component to the list
-            for(user in userMessageCounts)
-              finalUserMessageCounts.push(buildUserCountDiv(user, userMessageCounts[user]))
+            if (fetchedMessagesByUser.size) {
+              // After adding all messages, append message counts (length of message array)
+              // to the beginning of each user's message array *if messages were added*
+              fetchedMessagesByUser.forEach((userMessages, user) => {
+                completeMessageDiv.push(
+                  [buildNumUserMessagesDiv(user, userMessages.length), ...userMessages]
+                );
+              })
+              setMessages(completeMessageDiv.map((div, index) => h('div', {key: index}, div)));
+            };
           })
-          .then(() => {
-            // update render state of each users message counts if msgs pushed
-            if (finalUserMessageCounts > 2)
-              setNumUserMessages(finalUserMessageCounts);
-          })
-          .catch(error => console.log(error.message));
-      };
-      // final state should be the message counts followed by messages
-      return [...numMessagesPerUser, ...allMessages];
+        .catch(error => console.log(error.message));
+    };
+    return messagesByUser;
     };
 
-    function buildMessageDiv(message) {
-      const { user, text } = message;
-      const date = new Date(message.timestamp);
+    function buildMessageDiv({user, text, timestamp}) {
+      const date = (new Date(timestamp)).toString();
       return (
-        h('div', {className: "message-div"},
-          h('div', {className: "message-header"},
-            h('div', {className: "left-align"}, user),
-            h('div', {className: "right-align"}, date.toString())
+        h('div', { className: "message-div" },
+          h('div', { className: "message-header" },
+            h('div', { className: "left-align" }, user),
+            h('div', { className: "right-align" }, date)
           ),
-          h('div', {className: "message-body"}, text)
+          h('div', { className: "message-body" }, text)
         )
       );
     };
 
-    function buildUserCountDiv(user, num) {
+    function buildNumUserMessagesDiv(user, count) {
       return (
-          h('div', null,
-            h('div', {style: {display: "inline"}}, user),
-            h('div', {style: {display: "inline", float: "right"}}, num),
-          )
+        h('div',
+          {},
+          user + " has posted " + count + " messages: ",
         )
+      );
     };
 
     // Fetch data and populate the UI of the page.
@@ -98,3 +96,5 @@
 </body>
 
 </html>
+
+
