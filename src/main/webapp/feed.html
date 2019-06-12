@@ -25,14 +25,13 @@
     const h = React.createElement;
 
     function MessageFeed() {
-      const [messagesByUser, setMessages] = React.useState(["No messages!", h('br')])
+      const [messagesByUser, setMessages] = React.useState([])
       React.useEffect(fetchMessages, []);
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
         // Store message React components in JS Map with emails as the key
         const fetchedMessagesByUser = new Map();
-        const completeMessageDiv = [];
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
@@ -40,31 +39,28 @@
             // Map messages to the users who posted them
             messages.forEach(message => {
               const {user} = message;
-              const newMessage = buildMessageDiv(message);
               if (!fetchedMessagesByUser.has(user))
-                fetchedMessagesByUser.set(user, [newMessage]);
+                fetchedMessagesByUser.set(user, [message]);
               else
                 fetchedMessagesByUser.set(
-                  user, [...fetchedMessagesByUser.get(user), newMessage]
+                  user, [...fetchedMessagesByUser.get(user), message]
                 );
             });
           })
-          .then(() => {
-            if (fetchedMessagesByUser.size) {
-              // After adding all messages, append message counts (length of message array)
-              // to the beginning of each user's message array *if messages were added*
-              fetchedMessagesByUser.forEach((userMessages, user) => {
-                completeMessageDiv.push(
-                  [buildNumUserMessagesDiv(user, userMessages.length), ...userMessages]
-                );
-              })
-              setMessages(completeMessageDiv.map((div, index) => h('div', {key: index}, div)));
-            };
+          .then(() => setMessages(fetchedMessagesByUser))
+          .catch(error => console.log(error.message));
+      }
+
+      return (
+        Array.from(messagesByUser.values())
+          .map((userMessages) => {
+            return ([
+              buildNumUserMessagesDiv(userMessages[0].user, userMessages.length),
+              ...userMessages.map((message) => buildMessageDiv(message))
+            ])
           })
-        .catch(error => console.log(error.message));
-    };
-    return messagesByUser;
-    };
+      )
+  };
 
     function buildMessageDiv({user, text, timestamp}) {
       const date = (new Date(timestamp)).toString();
