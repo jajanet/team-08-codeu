@@ -25,44 +25,42 @@
     const h = React.createElement;
 
     function MessageFeed() {
-      const [messagesByUser, setMessages] = React.useState([])
+      const [messages, setMessages] = React.useState([])
       React.useEffect(fetchMessages, []);
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
         // Store message React components in JS Map with emails as the key
-        const fetchedMessagesByUser = new Map();
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
-          .then(messages => {
-            // Map messages to the users who posted them
-            messages.forEach(message => {
-              const {user} = message;
-              if (!fetchedMessagesByUser.has(user))
-                fetchedMessagesByUser.set(user, [message]);
-              else
-                fetchedMessagesByUser.set(
-                  user, [...fetchedMessagesByUser.get(user), message]
-                );
-            });
-          })
-          .then(() => setMessages(fetchedMessagesByUser))
+          .then((messages) => setMessages(messages))
           .catch(error => console.log(error.message));
       }
 
+      const messageCount = new Map();
+      for (const message of messages) {
+        const { user } = message;
+        if (!messageCount.has(user)) {
+          messageCount.set(user, 0);
+        }
+
+        messageCount.set(user, messageCount.get(user) + 1);
+      }
+
       return (
-        Array.from(messagesByUser.values())
-          .map((userMessages) => {
-            return ([
-              buildNumUserMessagesDiv(userMessages[0].user, userMessages.length),
-              ...userMessages.map((message) => buildMessageDiv(message))
-            ])
+        h('div', null,
+          Array.from(messageCount.entries()).map(([user, count]) => {
+            return h(NumUserMessages, { user, count });
+          }),
+        Array.from(messages)
+          .map((message) => {
+            return h(MessageDiv, {...message, key: message.id});
           })
-      )
+      ));
   };
 
-    function buildMessageDiv({user, text, timestamp}) {
+    function MessageDiv({user, text, timestamp}) {
       const date = (new Date(timestamp)).toString();
       return (
         h('div', { className: "message-div" },
@@ -75,7 +73,7 @@
       );
     };
 
-    function buildNumUserMessagesDiv(user, count) {
+    function NumUserMessages({ user, count }) {
       return (
         h('div',
           {},
