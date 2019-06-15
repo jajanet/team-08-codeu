@@ -27,7 +27,6 @@
 
       // Fetch messages and add them to the page.
       function fetchMessages() {
-        // Store message React components in JS Map with emails as the key
         const url = '/feed';
         fetch(url)
           .then(response => response.json())
@@ -35,6 +34,7 @@
           .catch(error => console.log(error.message));
       }
 
+      // Store message counts in JS Map with emails as the key
       const messageCount = new Map();
       for (const message of messages) {
         const { user } = message;
