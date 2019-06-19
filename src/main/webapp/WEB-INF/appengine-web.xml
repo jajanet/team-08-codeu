@@ -22,8 +22,8 @@
   <sessions-enabled>true</sessions-enabled>
   <runtime>java8</runtime>
   <resource-files>
-    <include path="/WEB-INF/secrets.properties" />
-    <include path="/WEB-INF/secrets.development.properties" />
+    <include path="/WEB-INF/secrets/keys.properties" />
+    <include path="/WEB-INF/secrets/keys.development.properties" />
     <include path="/**.jsp" />
   </resource-files>
 </appengine-web-app>

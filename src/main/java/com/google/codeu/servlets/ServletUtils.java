@@ -19,7 +19,7 @@ public class ServletUtils {
 
   static Properties GetProductionProperties() throws IOException {
     InputStream input =
-        new FileInputStream(new File("WEB-INF/secrets.properties"));
+        new FileInputStream(new File("WEB-INF/secrets/keys.properties"));
 
     Properties props = new Properties();
     props.load(input);
@@ -27,8 +27,8 @@ public class ServletUtils {
   }
 
   static Properties GetDevelopmentProperties() throws IOException {
-    InputStream input =
-        new FileInputStream(new File("WEB-INF/secrets.development.properties"));
+    InputStream input = new FileInputStream(
+        new File("WEB-INF/secrets/keys.development.properties"));
 
     Properties props = new Properties();
     props.load(input);
