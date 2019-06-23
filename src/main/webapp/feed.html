@@ -48,7 +48,7 @@
       return (
         h('div', null,
           Array.from(messageCount.entries()).map(([user, count]) => {
-            return h(NumUserMessages, { user, count });
+            return h(NumUserMessages, { user, count, key: user });
           }),
           Array.from(messages)
             .map(message => {
@@ -65,7 +65,7 @@
             h('div', { className: "left-align" }, user),
             h('div', { className: "right-align" }, date)
           ),
-          h('div', { className: "message-body" }, text)
+          h('div', { className: "message-body", dangerouslySetInnerHTML: { __html: text } })
         )
       );
     };
