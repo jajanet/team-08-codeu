@@ -23,14 +23,14 @@
 
 /* Give each message a rounded border. */
 .message-div {
-  border: thin solid black;
+  border: thin solid gray;
   border-radius: 5px;
   margin-top: 20px;
 }
 
 /* Add a bottom border to the message header. */
 .message-header {
-  border-bottom: thin solid black;
+  border-bottom: thin solid gray;
   padding: 5px;
 }
 

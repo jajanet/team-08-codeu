@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-/* Prevent the page from becoming too wide. */
+/* Prevent the page from becoming too wide. 
 body {
   max-width: 600px;
 }
-
+*/
 /* Remove bullet points from navigation bar. */
 nav ul {
   list-style-type: none;
@@ -29,4 +29,50 @@ nav ul {
 nav li {
   display: inline-block;
   margin-right: 10px
+}
+
+
+h1 {
+  border-bottom: 3px double skyblue;
+}
+
+body {
+  background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/memphis-mini.png");
+  background-repeat: repeat;
+  background-size: 400px;
+  color: darkslategray;
+  word-break: break-all;
+}
+
+div {
+  background-color: white;
+}
+
+.navbar {
+  background-color: steelblue;
+  opacity: .87;
+}
+
+.nav-link {
+  color: rgb(255, 255, 255);
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, .7);
+}
+
+.collapse {
+  background: none;
+}
+
+b {
+  color: salmon;
+}
+
+i {
+  color: darksalmon;
+}
+
+ul li {
+  text-align: left;
 }
