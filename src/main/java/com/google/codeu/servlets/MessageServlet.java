@@ -92,9 +92,6 @@ public class MessageServlet extends HttpServlet {
     // Get the message entered by the user.
     String userText =
         Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    /*   String replacement = "<img src=\"$1\" />";
-       String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
-     */
 
     // Get the URL of the image that the user uploaded to Blobstore.
     String imageUrl = getUploadedFileUrl(request, "image");
