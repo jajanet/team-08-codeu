@@ -19,7 +19,7 @@ package com.google.codeu.data;
 import java.util.UUID;
 
 /** A single message posted by a user. */
-public static class Place {
+public class Place {
 
   private UUID id;
   private String owner;
