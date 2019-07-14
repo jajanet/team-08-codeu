@@ -18,6 +18,7 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,10 +38,18 @@ public class LoginServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
 
-    // If the user is already logged in, redirect to their page
+    // If the user is already logged in, redirect to their page + add them to
+    // datastore if they don't exist.
     if (userService.isUserLoggedIn()) {
-      String user = userService.getCurrentUser().getEmail();
-      response.sendRedirect("/user-page.html?user=" + user);
+      com.google.appengine.api.users.User aeUser = userService.getCurrentUser();
+      User user = User.getByEmail(aeUser.getEmail());
+
+      if (user == null) {
+        user = new User(aeUser);
+        User.store(user);
+      }
+
+      response.sendRedirect("/user-page.html?user=" + user.getEmail());
       return;
     }
 

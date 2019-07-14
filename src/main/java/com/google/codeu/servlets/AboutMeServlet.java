@@ -2,8 +2,7 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.Datastore.User;
+import com.google.codeu.data.User;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,13 +17,6 @@ import org.jsoup.safety.Whitelist;
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
 
-  private Datastore datastore;
-
-  @Override
-  public void init() {
-    datastore = new Datastore();
-  }
-
   /**
    * Responds with the "about me" section for a particular user.
    */
@@ -33,18 +25,18 @@ public class AboutMeServlet extends HttpServlet {
       throws IOException {
     response.setContentType("text/html");
 
-    String user = request.getParameter("user");
-    if (user.isEmpty() || user.equals("")) {
+    String email = request.getParameter("user");
+    if (email.isEmpty() || email.equals("")) {
       // Request is invalid, return empty response
       return;
     }
 
-    User userData = datastore.getUser(user);
-    if (userData == null || userData.getAboutMe() == null) {
+    User user = User.getByEmail(email);
+    if (user == null || user.getAboutMe() == null) {
       return;
     }
 
-    response.getOutputStream().println(userData.getAboutMe());
+    response.getOutputStream().println(user.getAboutMe());
   }
 
   @Override
@@ -56,13 +48,14 @@ public class AboutMeServlet extends HttpServlet {
       return;
     }
 
-    String userEmail = userService.getCurrentUser().getEmail();
+    String email = userService.getCurrentUser().getEmail();
     String aboutMe = request.getParameter("about-me");
     aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
-    User user = new User(userEmail, aboutMe);
-    datastore.storeUser(user);
+    User user = User.getByEmail(email);
+    user.setAboutMe(aboutMe);
+    User.store(user);
 
-    response.sendRedirect("/user-page.html?user=" + userEmail);
+    response.sendRedirect("/user-page.html?user=" + email);
   }
 }
