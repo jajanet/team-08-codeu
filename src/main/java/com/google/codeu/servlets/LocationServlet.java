@@ -19,6 +19,6 @@ public class LocationServlet extends HttpServlet {
                     "HEAD_HTML", "<link rel='stylesheet' href='/css/main.css'>"
                             + "<link rel='stylesheet' href='/css/user-page.css'>");
 
-            ServletUtils.RenderReact("add-location-loader", request, response);
+            ServletUtils.RenderReact("add-location", request, response);
         }
 }

@@ -117,7 +117,7 @@ function fetchAboutMe() {
 }
 
 function fetchBlobstoreUrlAndShowForm() {
-  fetch("/blobstore-upload-url")
+  fetch("/api/blobstore-upload-url")
     .then(response => {
       return response.text();
     })
