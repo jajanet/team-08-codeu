@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Handles fetching all users for the community page.
- */
+/** Handles fetching all users for the community page. */
 @WebServlet("/api/users")
 public class UserListServlet extends HttpServlet {
 
@@ -24,8 +22,7 @@ public class UserListServlet extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     List<User> users = User.getAll();
     Gson gson = new Gson();

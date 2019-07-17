@@ -7,8 +7,6 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.codeu.data.Datastore;
-import com.google.codeu.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,18 +23,26 @@ public class User {
   }
 
   public User(Entity entity) {
-    this.email = (String)entity.getProperty("email");
-    this.aboutMe = (String)entity.getProperty("aboutMe");
-    this.id = (String)entity.getProperty("id");
+    this.email = (String) entity.getProperty("email");
+    this.aboutMe = (String) entity.getProperty("aboutMe");
+    this.id = (String) entity.getProperty("id");
   }
 
-  public String getEmail() { return email; }
+  public String getEmail() {
+    return email;
+  }
 
-  public String getAboutMe() { return aboutMe; }
+  public String getAboutMe() {
+    return aboutMe;
+  }
 
-  public String getId() { return id; }
+  public String getId() {
+    return id;
+  }
 
-  public void setAboutMe(String aboutMe) { this.aboutMe = aboutMe; }
+  public void setAboutMe(String aboutMe) {
+    this.aboutMe = aboutMe;
+  }
 
   public static List<User> getAll() {
     DatastoreService datastore = Datastore.GetSingletonService();
@@ -45,7 +51,8 @@ public class User {
     List<User> users = new ArrayList<User>();
     for (Entity entity : results.asIterable()) {
       users.add(new User(entity));
-    };
+    }
+    ;
 
     return users;
   }
@@ -63,8 +70,7 @@ public class User {
   public static User getByEmail(String email) {
     DatastoreService datastore = Datastore.GetSingletonService();
 
-    Filter emailFilter =
-        new FilterPredicate("email", FilterOperator.EQUAL, email);
+    Filter emailFilter = new FilterPredicate("email", FilterOperator.EQUAL, email);
     Query query = new Query("User").setFilter(emailFilter);
 
     Entity entity = datastore.prepare(query).asSingleEntity();
