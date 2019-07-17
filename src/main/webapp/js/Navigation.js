@@ -5,13 +5,11 @@
 import React, { useState, useEffect } from 'react';
 
 function Navigation() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState("");
+  const [username, setUsername] = useState(null");
 
   useEffect(() => fetch("/login-status")
     .then(response => response.json())
     .then(loginStatus => {
-      setLoggedIn(loginStatus.isLoggedIn);
       setUser(loginStatus.username);
     })
     .catch(e => console.log(e)),
@@ -23,9 +21,9 @@ function Navigation() {
       <ul id="navigation">
         <NavLink url="/" text="Home" />
         <NavLink url="/aboutus.html" text="About Our Team" />
-        { loggedIn
+        { username !== null
         ? <React.Fragment>
-          <NavLink url={"/user-page.html?user=" + user} text="Your Page" />
+          <NavLink url={"/user-page.html?user=" + username} text="Your Page" />
           <NavLink url="/community.html" text="Community" />
           <NavLink url="/logout" text="Logout" />
         </React.Fragment>
