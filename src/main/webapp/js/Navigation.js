@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 
 function Navigation() {
-  const [username, setUsername] = useState(null");
+  const [username, setUsername] = useState(null);
 
   useEffect(() => fetch("/login-status")
     .then(response => response.json())
