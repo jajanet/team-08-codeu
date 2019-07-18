@@ -97,6 +97,7 @@ function buildUI() {
   showMessageFormIfViewingSelf();
   fetchMessages();
   fetchAboutMe();
+  fetchBlobstoreUrlAndShowForm();
 }
 
 function fetchAboutMe() {
@@ -110,7 +111,18 @@ function fetchAboutMe() {
       if (aboutMe == "") {
         aboutMe = "This user has not entered any information yet.";
       }
-
       aboutMeContainer.innerHTML = aboutMe;
+    });
+}
+
+function fetchBlobstoreUrlAndShowForm() {
+  fetch("/api/blobstore-upload-url")
+    .then(response => {
+      return response.text();
+    })
+    .then(imageUploadUrl => {
+      const messageForm = document.getElementById("message-form");
+      messageForm.action = imageUploadUrl;
+      messageForm.classList.remove("hidden");
     });
 }

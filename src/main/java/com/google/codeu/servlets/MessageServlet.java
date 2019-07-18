@@ -16,6 +16,14 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
@@ -23,6 +31,8 @@ import com.google.codeu.data.Message;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +58,7 @@ public class MessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     response.setContentType("application/json");
 
@@ -67,10 +77,12 @@ public class MessageServlet extends HttpServlet {
     response.getWriter().println(json);
   }
 
-  /** Stores a new {@link Message}. */
+  /**
+   * Stores a new {@link Message}.
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
+          throws IOException {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
@@ -79,13 +91,10 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
+    // Get the message entered by the user.
     String userText =
-        Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    String replacement = "<img src=\"$1\" />";
-    String textWithImagesReplaced = userText.replaceAll(REGEX, replacement);
-
-    Message message = new Message(user, textWithImagesReplaced);
-    datastore.storeMessage(message);
-    response.sendRedirect("/user-page.html?user=" + user);
+            Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    // Get the URL of the image that the user uploaded to Blobstore.
+    String imageUrl = BlobstoreServlet.getUploadedFileUrl(request, "image");
   }
 }
