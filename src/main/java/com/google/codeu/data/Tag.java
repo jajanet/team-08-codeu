@@ -27,7 +27,7 @@ public class Tag {
    * Constructs a new {@link Tag} posted using only a label
    */
   public Tag(String label) {
-    this(label);
+    this.label;
   }
   
   /** Return Tag data using based on entity from search query. */
