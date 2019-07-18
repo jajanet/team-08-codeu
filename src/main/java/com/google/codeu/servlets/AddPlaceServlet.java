@@ -12,8 +12,12 @@ import java.util.Properties;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
+import com.google.codeu.data.Message;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 @WebServlet("/api/place")
 public class AddPlaceServlet extends HttpServlet {
@@ -38,16 +42,32 @@ public class AddPlaceServlet extends HttpServlet {
         // Get the name entered by the user.
         String userNameText =
                 Jsoup.clean(request.getParameter("name"), Whitelist.none());
+        System.out.println(userNameText);
 
         // Get the x_coord entered by the user.
         String userXCoordText =
                 Jsoup.clean(request.getParameter("x_coord"), Whitelist.none());
+        System.out.println(userXCoordText);
 
         // Get the y_coord entered by the user.
         String userYCoordText =
                 Jsoup.clean(request.getParameter("y_coord"), Whitelist.none());
+        System.out.println(userYCoordText);
 
-        // Get the URL of the image that the user uploaded.
+        String userText = userNameText + userXCoordText + userYCoordText;
+        String imageHTML = "";
+
+
+        // Get the URL of the image that the user uploaded to Blobstore.
         String imageUrl = BlobstoreServlet.getUploadedFileUrl(request, "image");
+        if (imageUrl != null) {
+            imageHTML = "<a href=\"" + imageUrl + "\">"
+                    + "<img src=\"" + imageUrl + "\"/>"
+                    + "</a>";
+        }
+
+        Message message = new Message(user, userText + imageHTML);
+        datastore.storeMessage(message);
+
     }
 }
