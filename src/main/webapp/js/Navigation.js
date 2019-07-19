@@ -2,7 +2,7 @@
  * Creates navigation depending on whether user is logged in or not
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 
 function Navigation() {
   const [username, setUsername] = useState(null);
@@ -10,32 +10,41 @@ function Navigation() {
   useEffect(() => fetch("/login-status")
     .then(response => response.json())
     .then(loginStatus => {
-      setUser(loginStatus.username);
+      setUsername(loginStatus.username);
     })
     .catch(e => console.log(e)),
     []
   );
 
   return (
-    <nav>
-      <ul id="navigation">
-        <NavLink url="/" text="Home" />
-        <NavLink url="/aboutus.html" text="About Our Team" />
-        { username !== null
-        ? <React.Fragment>
-          <NavLink url={"/user-page.html?user=" + username} text="Your Page" />
-          <NavLink url="/community.html" text="Community" />
-          <NavLink url="/logout" text="Logout" />
-        </React.Fragment>
-        : <NavLink url="/login" text="Login" />      
-        }
-      </ul>
+    <nav id="navigation"
+      style={{
+        display: "flow-root",
+        backgroundColor: "rgba(255, 255, 255, 0.8)",
+        padding: 5,
+        top: 0,
+        marginBottom: 10,
+        position: "sticky"
+      }}>
+      <NavLink url="/" text="8lobal" style={{ float: "left" }} />
+      <NavLink url="/" text="Home" />
+      <NavLink url="/aboutus.html" text="About Our Team" />
+      { username !== null
+      ? <Fragment>
+        <NavLink url={"/user-page.html?user=" + username} text="Your Page" />
+        <NavLink url="/community.html" text="Community" />
+        <NavLink url="/logout" text="Logout" />
+      </Fragment>
+      : <NavLink url="/login" text="Login" />      
+      }
     </nav>
-  )
+)
 }
 
-function NavLink({url, text}) {
-  return <li><a href={url}>{text}</a></li>
+function NavLink({ url, text, style }) {
+  return <div style={{ display: "inline", margin: 10, float: "right", ...style }}>
+      <a href={url}>{text}</a>
+    </div>;
 }
 
 export default Navigation;
