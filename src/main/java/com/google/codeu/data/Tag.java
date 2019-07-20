@@ -1,3 +1,4 @@
+
 /*
  * Copyright 2019 Google Inc.
  *
@@ -27,6 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+
+
+
 /** A tag, which can map to many different places. */
 public class Tag {
 
@@ -47,7 +51,7 @@ public class Tag {
     this.id = id;
     this.label = label;
   }
-  
+
   /** Return Tag data using based on entity from search query. */
   public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
