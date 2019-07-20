@@ -47,9 +47,7 @@ public class PlaceTag {
    */
   public PlaceTag(Place place, Tag tag) {
     this.place = KeyFactory.createKey("Place", place.getId().toString());
-    this.tag = KeyFactory.createKey("Tag", tag.getLabel());
-    // would PlaceTag(place.getId(), tag.getLabel()) work too,
-    // as in using the constructor above?
+    this.tag = KeyFactory.createKey("Tag", tag.getId().toString());
   }
 
   /** Return PlaceTag data using based on entity from search query. */
@@ -87,8 +85,8 @@ public class PlaceTag {
   public static List<PlaceTag> getByTag(Tag tag) {
     DatastoreService datastore = Datastore.GetSingletonService();
     List<PlaceTag> placeTags = new ArrayList<>();
-    String label = tag.getLabel();
-    Query query = new Query("PlaceTag").setFilter(new Query.FilterPredicate("tag", FilterOperator.EQUAL, label))
+    Key tagId = KeyFactory.createKey("Tag", tag.getId().toString());
+    Query query = new Query("PlaceTag").setFilter(new Query.FilterPredicate("tag", FilterOperator.EQUAL, tagId))
         .addSort("place", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
     for (Entity entity : results.asIterable()) {
