@@ -17,6 +17,7 @@ export function createMap(rows) {
       pin.timestamp
     );
   });
+  return map;
 }
 
 /** Adds a marker that shows an info window when clicked. */

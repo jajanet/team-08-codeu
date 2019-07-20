@@ -86,8 +86,13 @@ window.buildUI = function buildUI() {
   fetchMessages();
   fetchAboutMe();
   fetchBlobstoreUrlAndShowForm();
-  fetchPlaces();
-}
+  fetchPlaces().then(rows => {
+    const map = createMap(rows);
+    buildSearchBar(map);
+    const rootElement = document.getElementById("PinList");
+    ReactDOM.render(<PinList rows={rows} />, rootElement);
+  });
+};
 
 function fetchAboutMe() {
   const url = "/about?user=" + parameterUsername;
@@ -117,14 +122,65 @@ function fetchBlobstoreUrlAndShowForm() {
 }
 
 function fetchPlaces() {
-  fetch("/api/place?user=" + parameterUsername)
+  return fetch("/api/place?user=" + parameterUsername)
     .then(response => {
       return response.json();
     })
-    .then(rows => {
-      createMap(rows);
-      const rootElement = document.getElementById("PinList");
-      ReactDOM.render(<PinList rows={rows} />, rootElement);
-    });
 }
 
+function buildSearchBar(map) {
+
+  // Create the search box and link it to the UI element.
+  var input = document.getElementById("pac-input");
+  var searchBox = new google.maps.places.Autocomplete(input);
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  // Bias the SearchBox results towards current map's viewport.
+  map.addListener("bounds_changed", function() {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  var marker = null;
+  // Listen for the event fired when the user selects a prediction and retrieve
+  // more details for that place.
+  searchBox.addListener("place_changed", function() {
+    var place = searchBox.getPlace();
+    console.log(place.geometry.location.lat(),place.geometry.location.lng());
+
+    // Clear out the old markers.
+    if(marker != null) {
+      marker.setMap(null);
+    };
+    marker = null;
+
+    // For each place, get the icon, name and location.
+    var bounds = new google.maps.LatLngBounds();
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+      var icon = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+      // Create a marker for each place.
+      marker =
+        new google.maps.Marker({
+          map: map,
+          icon: icon,
+          title: place.name,
+          position: place.geometry.location
+        });
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    map.fitBounds(bounds);
+  });
+}
