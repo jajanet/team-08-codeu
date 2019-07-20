@@ -4,26 +4,38 @@ import ReactDOM from "react-dom";
 class AddPlace extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: "", description:"", x_coord: "", y_coord: "", image: ""};
+    this.state = {
+      name: "",
+      description: "",
+      x_coord: "",
+      y_coord: "",
+      image: ""
+    };
   }
 
- componentDidMount() {
+  componentDidMount() {
     this.fetchBlobstoreURL();
-   }
+  }
 
-fetchBlobstoreURL() {
+  fetchBlobstoreURL() {
     fetch("/api/add_place_blobstore")
-     .then(res => {
-           return res.text();
-         })
-         .then(blobstoreURL => {
-           this.setState({ blobstoreURL });
-         });
-     }
-
+      .then(res => {
+        return res.text();
+      })
+      .then(blobstoreURL => {
+        this.setState({ blobstoreURL });
+      });
+  }
 
   render() {
-    const { name, description, x_coord, y_coord, image, blobstoreURL } = this.state;
+    const {
+      name,
+      description,
+      x_coord,
+      y_coord,
+      image,
+      blobstoreURL
+    } = this.state;
 
     if (blobstoreURL == null) {
       return "Loading...";
@@ -41,15 +53,15 @@ fetchBlobstoreURL() {
           }}
         />
         <br />
-                <textarea
-                  name="description"
-                  placeholder={"Enter your location's description"}
-                  value={this.state.description}
-                  onChange={e => {
-                    this.setState({ description: e.target.value });
-                  }}
-                />
-                <br />
+        <textarea
+          name="description"
+          placeholder={"Enter your location's description"}
+          value={this.state.description}
+          onChange={e => {
+            this.setState({ description: e.target.value });
+          }}
+        />
+        <br />
         <textarea
           name="x_coord"
           placeholder={"Enter a X-coord"}
