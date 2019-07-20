@@ -25,22 +25,33 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /** A tag, which can map to many different places. */
 public class Tag {
 
+  private UUID id;
   private String label;
+  
+  /**
+   * Constructs a new {@link Tag} with a label and a random ID
+   */
+  public Tag(String label) {
+    this(UUID.randomUUID(), label);
+  }
 
   /**
    * Constructs a new {@link Tag} posted using only a label
    */
-  public Tag(String label) {
+  public Tag(UUID id, String label) {
+    this.id = id;
     this.label = label;
   }
   
   /** Return Tag data using based on entity from search query. */
   public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
+    this.id = (UUID)entity.getProperty("id");
   }
   
   /** Stores a new tag in the Datastore. */
@@ -77,6 +88,10 @@ public class Tag {
 
   public String getLabel() {
     return label;
+  }
+  
+  public UUID getId() {
+    return id;
   }
 
 }
