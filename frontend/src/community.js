@@ -4,7 +4,8 @@ import ReactDOM from "react-dom";
 function User({ user }) {
   return (
     <React.Fragment>
-      <h2>{user.email}</h2>
+      <a href={"/user-page?user=" + user}><h3>{user.email}</h3></a>
+      <h4>About me!</h4>
       <div>{user.aboutMe}</div>
     </React.Fragment>
   );

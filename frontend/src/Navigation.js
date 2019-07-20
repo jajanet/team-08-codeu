@@ -28,7 +28,6 @@ function Navigation() {
         position: "sticky"
       }}
     >
-      <NavLink url="/" text="8lobal" style={{ float: "left" }} />
       <NavLink url="/" text="Home" />
       <NavLink url="/aboutus.html" text="About Our Team" />
       {username !== null ? (
