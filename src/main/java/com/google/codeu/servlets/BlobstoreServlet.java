@@ -19,9 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-@WebServlet(("/api/blobstore_url"))
+@WebServlet("/api/blobstore_url")
 public class BlobstoreServlet extends HttpServlet {
-
   private Datastore datastore;
 
   @Override
@@ -56,7 +55,7 @@ public class BlobstoreServlet extends HttpServlet {
 
     Message message = new Message(user, userText + imageHTML);
     datastore.storeMessage(message);
-    response.sendRedirect("/user-page.html?user=" + user);
+    response.sendRedirect("/user-page?user=" + user);
   }
 
   /**
