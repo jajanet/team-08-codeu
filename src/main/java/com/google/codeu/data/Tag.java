@@ -35,7 +35,7 @@ public class Tag {
    * Constructs a new {@link Tag} posted using only a label
    */
   public Tag(String label) {
-    this.label; = label
+    this.label = label;
   }
   
   /** Return Tag data using based on entity from search query. */
@@ -51,7 +51,7 @@ public class Tag {
   }
   
   
-  public static Tag getAll() {
+  public static List<Tag> getAll() {
     DatastoreService datastore = Datastore.GetSingletonService();
     Query query = new Query("Tag");
     PreparedQuery results = datastore.prepare(query);
