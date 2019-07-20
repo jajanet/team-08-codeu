@@ -51,16 +51,8 @@ public class Tag {
   /** Return Tag data using based on entity from search query. */
   public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
-    this.id = (UUID)entity.getProperty("id");
-  }
-  
-  /** Stores a new tag in the Datastore. */
-  public static void store(Tag tag) {
-    DatastoreService datastore = Datastore.GetSingletonService();
-    Entity tagEntity = new Entity("Tag", tag.getLabel());
-    tagEntity.setProperty("label", tag.getLabel());
-  }
-  
+    this.id = UUID.fromString((String)entity.getProperty("id"));
+  }  
   
   public static List<Tag> getAll() {
     DatastoreService datastore = Datastore.GetSingletonService();
