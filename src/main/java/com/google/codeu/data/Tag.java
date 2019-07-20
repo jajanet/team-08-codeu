@@ -17,6 +17,14 @@
 package com.google.codeu.data;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import java.util.ArrayList;
+import java.util.List;
 
 /** A tag, which can map to many different places. */
 public class Tag {
@@ -33,6 +41,38 @@ public class Tag {
   /** Return Tag data using based on entity from search query. */
   public Tag(Entity entity) {
     this.label = (String)entity.getProperty("label");
+  }
+  
+  /** Stores a new tag in the Datastore. */
+  public static void store(Tag tag) {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    Entity tagEntity = new Entity("Tag", tag.getLabel());
+    tagEntity.setProperty("label", tag.getLabel());
+  }
+  
+  
+  public static Tag getAll() {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    Query query = new Query("Tag");
+    PreparedQuery results = datastore.prepare(query);
+    List<Tag> tags = new ArrayList<Tag>();
+    for (Entity entity : results.asIterable()) {
+      tags.add(new Tag(entity));
+    }
+    return tags;
+  }
+
+  
+  public static Tag getByLabel(String label) {
+    DatastoreService datastore = Datastore.GetSingletonService();
+    Filter tagFilter = new FilterPredicate("label", FilterOperator.EQUAL, label);
+    Query query = new Query("Tag").setFilter(tagFilter);
+    Entity entity = datastore.prepare(query).asSingleEntity();
+    
+    if (entity == null) {
+      return null;
+    }
+    return new Tag(entity);
   }
 
   public String getLabel() {
