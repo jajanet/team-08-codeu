@@ -17,18 +17,19 @@
 package com.google.codeu.data;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Entity;
-import java.util.UUID;
+import com.google.appengine.api.datastore.KeyFactory;
+
 
 /** Class that maps tag-place relationships. */
 public class PlaceTag {
 
-  private UUID place;
-  private String tag;
+  private Key place;
+  private Key tag;
 
   /**
    * Constructs a new {@link PlaceTag} posted using only references to a tag and place
    */
-  public PlaceTag(UUID place, String tag) {
+  public PlaceTag(Key place, Key tag) {
     this(place);
     this(tag);
   }
@@ -46,15 +47,16 @@ public class PlaceTag {
   
   /** Return PlaceTag data using based on entity from search query. */
   public PlaceTag(Entity entity) {
-    this.place = (UUID)entity.getProperty("place");
-    this.tag = (String)entity.getProperty("tag");
+    // create key based on the string returned from getting the place and tag
+    this.place = KeyFactory.createKey("Place", entity.getProperty("place"))
+    this.tag = KeyFactory.createKey("Tag", entity.getProperty("tag"));
   }
 
-  public UUID getPlace() {
+  public Key getPlace() {
     return place;
   }
 
-  public String getTag() {
+  public Key getTag() {
     return tag;
   }
 
