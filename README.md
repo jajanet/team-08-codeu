@@ -12,3 +12,8 @@ We wanted to make an app where people can realize the diversity they have within
 
 # Credits
 Tyler Hou, Thomas Weathers, Sophia Qin, Janet Vu, Google CodeU Staff
+
+# Image License
+- Earth image used in background overlay:
+   - https://www.pexels.com/photo/planet-earth-41950/
+   - Creative Commons Zero license
