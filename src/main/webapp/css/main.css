@@ -17,8 +17,10 @@ html::after {
       #0f767f99 70%,
       #0f767fdb 85%,
       #0f767f 100%
-    ), url(https://images2.alphacoders.com/846/thumb-1920-846960.jpg);
-   opacity: .125;
+    ), url(
+    https://images.pexels.com/photos/41950/earth-planet-front-side-back-41950.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+    ); /* license: https://www.pexels.com/photo/planet-earth-41950/ */
+  opacity: .15;
   top: 0;
   left: 0;
   bottom: 0;
