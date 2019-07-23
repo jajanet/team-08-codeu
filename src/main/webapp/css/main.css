@@ -1,37 +1,36 @@
-/*
- * Copyright 2019 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 html {
   color: #353535;
-  width: 88%;
+  width: 70%;
   min-height: 100%;
   text-align: center;
   font-family: monospace;
-  letter-spacing: 0.25px;
   line-height: 22px;
-  background: linear-gradient(#0076c7, #19560e);
+  background: linear-gradient(#0076c7, #247516);
   word-break: break-word;
-  padding: 0 6% 6% 6%;
+  padding: 0 15% 6% 15%;
+}
+
+html::after {
+  content: "";
+  background: linear-gradient( 
+      #0076c700 40%,
+      #24751699 70%,
+      #247516db 85%,
+      #247516 100%),
+    url(https://images2.alphacoders.com/846/thumb-1920-846960.jpg);
+  opacity: .035;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 body {
-  background-color: white;
-  padding: 0 10% 10% 10%;
+  background: linear-gradient( white 75%, transparent);
+  padding: 0 10% 40% 10%;
   min-height: 95%;
-  
 }
 
 li, ul {
@@ -39,6 +38,7 @@ li, ul {
 }
 
 nav {
+  font-size: 1.1em;
   position: sticky;
   top: 0;
   margin: auto;
@@ -53,28 +53,28 @@ nav ul {
   text-align: center;
 }
 
-nav li, nav li a {
+nav li, nav a, nav span {
   display: inline-block;
   margin: 3px;
-  transition-duration: .6s;
   border-top: 4px solid white;
   padding: 4px;
   padding-top: 0;
+}
+
+nav a:hover {
+  border-top: 4px double goldenrod
+}
+
+a, nav li {
+  color: #0076c7;
+  transition-duration: .5s;
   text-decoration: none;
-}
-
-nav li:hover{
-  border-top: 4px double goldenrod;
-}
-
-a {
-  color: #008ba5;
 }
 
 a:hover {
   color: goldenrod;
+  text-shadow: 1px 1px 3px #cccccc;
 }
-
 
 #map {
   margin: auto;
@@ -85,22 +85,69 @@ a:hover {
   border: thin solid #e2e2e2;
 }
 
-
 h1 {
-  letter-spacing: 3px;
-  color: #f5d522;
+  letter-spacing: -.25px;
+  color: #ffe263;
+  text-shadow: .5px .5px 2px #696969;
   font-weight: 100;
-  font-size: 3.75em;
+  font-size: 3.25em;
   border-bottom: 4px double #f7f1d8;
   padding: 15px;
-  margin: 10px 10%;
+  padding-bottom: 10px;
+  margin: 5px 5%;
   word-break: break-all;
   line-height: 30px;
 }
 
 h2 {
-  text-transform: uppercase;
-  color: #259239;
-  word-break: break-all;
-  margin: 25px 0 0 0;
+  text-transform: lowercase;
+  color: #247516;
+  letter-spacing: 1.5px;
+  font-size: 1.85em;
+  font-weight: 500;
+  margin: 25px 0 5px 0;
+}
+
+.listContainer ul {
+  list-style-type: none;
+}
+
+.listContainer li {
+  border-left: 1px dotted #0076c7;
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+
+.listContainer li:hover {
+  border-left: 3px double #0076c7;
+  padding-left: 6px;
+  transition-duration: .2s;
+  opacity: .75;
+}
+
+.listContainer {
+  margin: 20px 0;
+  height: 100%;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.listContainer h1 {
+  top: 0;
+  position: sticky;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+textarea {
+  width: 100%;
+  opacity: .7;
+  padding: 7px;
+}
+
+textarea:hover, textarea:active {
+  opacity: 1;
+}
+
+hr {
+  border-color: white;
 }
